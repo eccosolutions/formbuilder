@@ -2,15 +2,17 @@ import React from "react";
 
 import FormActionsContainer from "./../../containers/builder/FormActionsContainer";
 import SchemaField from "react-jsonschema-form/lib/components/fields/SchemaField";
+import {getDefaultRegistry} from "react-jsonschema-form/lib/utils";
 
 export default function Form(props) {
   const {error, dragndropStatus} = props;
   console.log("dragndropstatus", dragndropStatus);
 
+  const registryIn = SchemaField.defaultProps.registry ? SchemaField.defaultProps.registry : getDefaultRegistry();
   const registry = {
-    ...SchemaField.defaultProps.registry,
+    ...registryIn,
     fields: {
-      ...SchemaField.defaultProps.registry.fields,
+      ...registryIn.fields,
       SchemaField: props.SchemaField,
       TitleField: props.TitleField,
       DescriptionField: props.DescriptionField,
