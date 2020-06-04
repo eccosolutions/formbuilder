@@ -7,6 +7,25 @@ export default {
   appURL: process.env.APP_URL || window.location.origin + window.location.pathname,
   fieldList: [
     {
+      id: "nonInputText",
+      icon: "text-color",
+      label: "Text",
+      jsonSchema: {
+        type: "null",
+        title: "Edit me",
+        description: ""
+      },
+      uiSchema: {
+        editSchema: {
+          type: "object",
+          properties: {
+            title: {type: "string", title: "Label"}
+          }
+        }
+      },
+      formData: {}
+    },
+    {
       id: "text",
       icon: "text-color",
       label: "Short text",
