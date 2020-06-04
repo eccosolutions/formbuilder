@@ -6,6 +6,8 @@ Formbuilder
 If you want to try it out, have a look [at the demo
 page](https://kinto.github.io/formbuilder/)
 
+Note that most things are reasonably obvious, but drag/drop isn't. Simply ensure 'Submit' is pressed then drag/drop swaps the elements around.
+
 Or deploy it on Scalingo in a single click on this button:
 
 [![Deploy to Scalingo](https://cdn.scalingo.com/deploy/button.svg)](https://my.scalingo.com/deploy)
