@@ -4,6 +4,7 @@ import Form from "react-jsonschema-form";
 import SchemaField from "react-jsonschema-form/lib/components/fields/SchemaField";
 import { ButtonToolbar, Button } from "react-bootstrap";
 import FieldListDropdown from "./FieldListDropdown";
+import {RIEInput} from "riek";
 
 /**
  * Recopies the keys listed in "source" using the values in the "target"
@@ -32,6 +33,16 @@ function shouldHandleDoubleClick(node) {
   return true;
 }
 
+/**
+ * Determine how to render the field - because markdown isn't a capability of react-jsonschema-form (although we use the schema).
+ * Find the editor to use inside the field's editSchema, which is passed with the schema.
+ * Its a handy way to pass data (which SHOULD be stripped out upon saving) when react-jsonschema-form is in control of the rendering.
+ * NB EditableField.js is passed as 'SchemaField' to react-jsonschema-form to render the fields - see FormContainer.js
+ */
+function renderer(uiSchema) {
+  return uiSchema.editSchema && uiSchema.editSchema.editor || "react-jsonschema-form";
+}
+
 class FieldPropertiesEditor extends Component {
   constructor(props) {
     super(props);
@@ -43,6 +54,10 @@ class FieldPropertiesEditor extends Component {
 
   onChange({formData}) {
     this.setState({editedSchema: formData});
+  }
+
+  onChangeUi(uiSchema) {
+    this.setState({editedUiSchema: uiSchema});
   }
 
   render() {
@@ -77,13 +92,27 @@ class FieldPropertiesEditor extends Component {
             </ButtonToolbar>
         </div>
         <div className="panel-body">
-          <Form
-            schema={uiSchema.editSchema}
-            formData={formData}
-            onChange={this.onChange.bind(this)}
-            onSubmit={onUpdate}>
-            <button type="submit" className="btn btn-info pull-right">Submit</button>
-          </Form>
+          {renderer(uiSchema) === "markdown"
+            ?
+              <div>
+                <RIEInput
+                    className="edit-in-place"
+                    classEditing="edit-in-place-active"
+                    propName="md"
+                    value={this.state.editedUiSchema.md}
+                    change={(v) => this.setState({editedUiSchema: v})}
+                />
+                <Button bsStyle="info" className={"pull-right"} onClick={() => onUpdateUi(uiSchemaUpdated)}>Submit</Button>
+              </div>
+            :
+              <Form
+                  schema={uiSchema.editSchema}
+                  formData={formData}
+                  onChange={this.onChange.bind(this)}
+                  onSubmit={onUpdate}>
+                <button type="submit" className="btn btn-info pull-right">Submit</button>
+              </Form>
+          }
         </div>
       </div>
     );
@@ -213,9 +242,14 @@ export default class EditableField extends Component {
         onDelete={this.handleDelete.bind(this)}
         onDoubleClick={this.handleEdit.bind(this)}
         onDrop={this.handleDrop.bind(this)}>
-        <SchemaField {...props}
-          schema={this.state.schema}
-          idSchema={{$id: props.name}} />
+        {renderer(props.uiSchema) === "markdown"
+            ?
+              <div>{this.state.uiSchema.md}</div>
+            :
+              <SchemaField {...props}
+                           schema={this.state.schema}
+                           idSchema={{$id: props.name}} />
+        }
       </DraggableFieldContainer>
     );
   }
