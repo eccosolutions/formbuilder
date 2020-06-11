@@ -35,7 +35,10 @@ function shouldHandleDoubleClick(node) {
 class FieldPropertiesEditor extends Component {
   constructor(props) {
     super(props);
-    this.state = {editedSchema: props.schema};
+    this.state = {
+      editedSchema: props.schema,
+      editedUiSchema: props.uiSchema
+    };
   }
 
   onChange({formData}) {
@@ -43,12 +46,17 @@ class FieldPropertiesEditor extends Component {
   }
 
   render() {
-    const {schema, name, required, uiSchema, onCancel, onUpdate, onDelete} = this.props;
+    const {schema, name, required, uiSchema, onCancel, onUpdate, onUpdateUi, onDelete} = this.props;
     const formData = {
       ...schema,
       required,
       ...this.state.editedSchema,
       name: this.state.name
+    };
+
+    const uiSchemaUpdated = {
+      ...uiSchema,
+      ...this.state.editedUiSchema
     };
 
     return (
@@ -116,11 +124,17 @@ function DraggableFieldContainer(props) {
 export default class EditableField extends Component {
   constructor(props) {
     super(props);
-    this.state = {edit: true, schema: props.schema};
+    this.state = {edit: true,
+      schema: props.schema,
+      uiSchema: props.uiSchema
+    };
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({schema: nextProps.schema});
+    this.setState({
+      schema: nextProps.schema,
+      uiSchema: nextProps.uiSchema
+    });
   }
 
   handleEdit(event) {
@@ -138,6 +152,12 @@ export default class EditableField extends Component {
     this.setState({edit: false, schema});
     this.props.updateField(
       this.props.name, schema, formData.required, formData.title);
+  }
+
+  handleUpdateUi(uiSchema) {
+    this.setState({edit: false, uiSchema});
+    this.props.updateFieldUi(
+        this.props.name, uiSchema, this.props.name);
   }
 
   handleDelete(event) {
@@ -172,6 +192,7 @@ export default class EditableField extends Component {
           {...props}
           onCancel={this.handleCancel.bind(this)}
           onUpdate={this.handleUpdate.bind(this)}
+          onUpdateUi={this.handleUpdateUi.bind(this)}
           onDelete={this.handleDelete.bind(this)} />
       );
     }
