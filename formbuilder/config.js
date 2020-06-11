@@ -36,7 +36,10 @@ export default {
       },
       uiSchema: {
         "ui:field": "markdownBlock",
-        md: "MARK DOWN TEXT"
+        md: "MARK DOWN TEXT",
+        editSchema: {
+          editor: "markdown"
+        }
       },
       formData: {}
     },
