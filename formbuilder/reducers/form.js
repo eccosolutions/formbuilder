@@ -5,6 +5,7 @@ import {
   FIELD_SWITCH,
   FIELD_REMOVE,
   FIELD_UPDATE,
+  FIELD_UI_UPDATE,
   FIELD_INSERT,
   FIELD_SWAP,
   FORM_RESET,
@@ -96,6 +97,11 @@ function updateField(state, name, schema, required, newLabel) {
   return {...state, error: null};
 }
 
+function updateFieldUi(state, name, uiSchema) {
+  state.uiSchema[name] = uiSchema;
+  return {...state, error: null};
+}
+
 function renameField(state, name, newName) {
   const schema = clone(state.schema.properties[name]);
   const uiSchema = clone(state.uiSchema[name]);
@@ -164,6 +170,8 @@ export default function form(state = INITIAL_STATE, action) {
   case FIELD_UPDATE:
     const {name, schema, required, newName} = action;
     return updateField(clone(state), name, schema, required, newName);
+  case FIELD_UI_UPDATE:
+    return updateFieldUi(clone(state), action.name, action.uiSchema, action.newName);
   case FIELD_INSERT:
     return insertField(clone(state), action.field, action.before);
   case FIELD_SWAP:

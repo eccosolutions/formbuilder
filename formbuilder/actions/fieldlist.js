@@ -2,6 +2,7 @@ export const FIELD_ADD = "FIELD_ADD";
 export const FIELD_SWITCH = "FIELD_SWITCH";
 export const FIELD_REMOVE = "FIELD_REMOVE";
 export const FIELD_UPDATE = "FIELD_UPDATE";
+export const FIELD_UI_UPDATE = "FIELD_UI_UPDATE";
 export const FIELD_INSERT = "FIELD_INSERT";
 export const FIELD_SWAP = "FIELD_SWAP";
 export const FORM_RESET = "FORM_RESET";
@@ -27,6 +28,10 @@ export function removeField(name) {
 
 export function updateField(name, schema, required, newName) {
   return {type: FIELD_UPDATE, name, schema, required, newName};
+}
+
+export function updateFieldUi(name, uiSchema) {
+  return {type: FIELD_UI_UPDATE, name, uiSchema};
 }
 
 export function swapFields(source, target) {
