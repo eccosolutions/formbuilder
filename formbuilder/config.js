@@ -9,7 +9,7 @@ export default {
     {
       id: "nonInputText",
       icon: "text-color",
-      label: "Text",
+      label: "Short note",
       jsonSchema: {
         type: "null",
         title: "Edit me",
