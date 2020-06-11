@@ -19,7 +19,8 @@ export default {
         editSchema: {
           type: "object",
           properties: {
-            title: {type: "string", title: "Label"}
+            title: {type: "string", title: "Title"},
+            description: {type: "string", title: "Paragraph"}
           }
         }
       },
