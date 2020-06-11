@@ -27,6 +27,20 @@ export default {
       formData: {}
     },
     {
+      id: "nonInputMarkdown",
+      icon: "text-color",
+      label: "Long note",
+      jsonSchema: {
+        type: "object",
+        properties: {}
+      },
+      uiSchema: {
+        "ui:field": "markdownBlock",
+        md: "MARK DOWN TEXT"
+      },
+      formData: {}
+    },
+    {
       id: "text",
       icon: "text-color",
       label: "Short text",
