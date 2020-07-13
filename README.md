@@ -231,3 +231,42 @@ The UserForm is what the people that will fill the form will see.
   <UserForm>
 </App>
 ```
+
+## A walkthrough the code
+
+### 'add a field'
+FormActionsContainer.js does the wiring for top-level FormActions.js which has a FieldListDropdown -> handleFieldListAction and calls props.addField. Via some redux, it calls form.js addField(state - see INITIAL_STATE, field - from 'config.fieldList'). This takes its fieldList 'jsonSchema' and 'uiSchema' as the default properties / uiSchema:
+- config.js 'jsonSchema' is only used in form.js addField/switchField to merge into the schema as defaults
+- config.js 'uiSchema' is only used in form.js addField/switchField to merge into the schema as defaults
+- config.js 'uiSchema' includes an editSchema which is used in EditableField.js to display the field uiSchema (only used in EditableField FieldPropertiesEditor Form)
+the overall state has now been modified
+
+### Rendering the form
+routes.js /builder/ opens FormContainer.js which calls Form.js which defers the rendering of the schema to react-jsonschema-form. react-jsonschema-form's SchemaField is used to render the whole form, when specified with a 'registry' allowing rendering controls to be passed in.
+- the registry's fields.TitleField property comes from FormContainer as TitleField which is an editable area (using riek's RIEInput)
+- the registry's fields.DescriptionField property comes from FormContainer as DescriptionField which is an editable area (using riek's RIEInput)
+- the registry's fields.SchemaField property comes from FormContainer as EditableField which wraps the field, eventually rendering with react-jsonschema-form
+
+So the react-jsonschema-form is used to render the formbuilder fields (eg config.js, radiobuttonlist). Then rendering can depend on the edit mode:
+- if state.edit -> FieldPropertiesEditor (change/delete/close) renders with react-jsonschema-form's Form
+  * config.js editSchema is only used in EditableField FieldPropertiesEditor Form to indicate what can be edited
+            - formData is a merge of schema,editedSchema,required etc
+  * Form 'submit' is likely to clean the schema and remove editSchema
+- if !state.edit -> renders with react-jsonschema-form's SchemaField with idSchema (not registry) which must select the field to render (the TitleField's and DescriptionField's don't apply here seemingly)
+
+
+## Finding a markdown approach
+We decided to render using the approach in https://github.com/mozilla-services/react-jsonschema-form/issues/647 which uses ui:field - see 'custom' from https://rjsf-team.github.io/react-jsonschema-form/. For example:
+in schema:
+
+    "type": "object",
+    "properties": {
+        "mytext": {"type": "object","properties": {}}
+    }
+in uiSchema:
+
+    "mytext": {"ui:field": "markdownBlock","md": "<ESCAPED TEXT>"}
+
+This requires a 'fields' with {markdownBlock: MarkdownBlock} where MarkdownBlock is a component to render it. The props are FieldProps (from react-jsonschema-form) which include uiSchema that can be 'string: any' which we convert to type {md: string | null} to get the 'md'.
+
+Formbuilder is a wrapper to show and extract a schema using react-jsonschema-form itself. So we need to create a new field which has a markdown definition (see config.js) but we don't need to render using react-jsonschema-form, we can render using anything - like https://github.com/probablyup/markdown-to-jsx so as long as the schema is updated we're good.
