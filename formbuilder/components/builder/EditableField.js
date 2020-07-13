@@ -4,7 +4,7 @@ import Form from "react-jsonschema-form";
 import SchemaField from "react-jsonschema-form/lib/components/fields/SchemaField";
 import { ButtonToolbar, Button } from "react-bootstrap";
 import FieldListDropdown from "./FieldListDropdown";
-import {RIEInput} from "riek";
+import {RIETextArea} from "riek";
 
 /**
  * Recopies the keys listed in "source" using the values in the "target"
@@ -95,7 +95,7 @@ class FieldPropertiesEditor extends Component {
           {renderer(uiSchema) === "markdown"
             ?
               <div>
-                <RIEInput
+                <RIETextArea
                     className="edit-in-place"
                     classEditing="edit-in-place-active"
                     propName="md"
