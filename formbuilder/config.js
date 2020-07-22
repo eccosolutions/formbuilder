@@ -133,7 +133,7 @@ export default {
               title: "Choices",
               properties: {
                 enum: {
-                  title: null,
+                  title: "",
                   type: "array",
                   items: {
                     type: "string"
