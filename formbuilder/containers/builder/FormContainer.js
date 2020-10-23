@@ -9,6 +9,8 @@ import EditableField from "../../components/builder/EditableField";
 import TitleField from "../../components/builder/TitleField";
 import DescriptionField from "../../components/builder/DescriptionField";
 
+// HANDLE THE react-json-schema
+
 function mapStateToProps(state) {
   return {
     error: state.form.error,

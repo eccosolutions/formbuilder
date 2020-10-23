@@ -4,6 +4,8 @@ import FormActions from "../../components/builder/FormActions";
 import * as FieldListActions from "../../actions/fieldlist";
 import config from "../../config";
 
+// HANDLE the 'add a field' ??
+
 function mapStateToProps(state) {
   return {
     fieldList: config.fieldList,
