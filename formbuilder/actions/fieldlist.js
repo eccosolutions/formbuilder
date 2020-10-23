@@ -5,10 +5,11 @@ export const FIELD_UPDATE = "FIELD_UPDATE";
 export const FIELD_UI_UPDATE = "FIELD_UI_UPDATE";
 export const FIELD_INSERT = "FIELD_INSERT";
 export const FIELD_SWAP = "FIELD_SWAP";
+export const FORM_SUBMITALL = "FORM_SUBMITALL";
+export const FORM_IMPORT = "FORM_IMPORT";
 export const FORM_RESET = "FORM_RESET";
 export const FORM_UPDATE_TITLE = "FORM_UPDATE_TITLE";
 export const FORM_UPDATE_DESCRIPTION = "FORM_UPDATE_DESCRIPTION";
-
 
 export function addField(field) {
   return {type: FIELD_ADD, field};
@@ -53,4 +54,8 @@ export function resetForm(callback) {
       callback();
     }
   };
+}
+
+export function submitAll() {
+  return {type: FORM_SUBMITALL};
 }

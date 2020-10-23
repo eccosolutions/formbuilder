@@ -8,6 +8,7 @@ import {
   FIELD_UI_UPDATE,
   FIELD_INSERT,
   FIELD_SWAP,
+  FORM_SUBMITALL,
   FORM_RESET,
   FORM_UPDATE_TITLE,
   FORM_UPDATE_DESCRIPTION,
@@ -24,7 +25,8 @@ const INITIAL_STATE = {
     properties: {}
   },
   uiSchema: {
-    "ui:order": []
+    "ui:order": [],
+    submitAll: false
   },
   formData: {},
   currentIndex: 0,
@@ -120,6 +122,15 @@ function renameField(state, name, newName) {
   return {...state, error: null};
 }
 
+function submitAll(state) {
+  const existing = Object.keys(state.schema.properties);
+  existing.forEach(i => {
+    state.uiSchema[i].editSchema.submitAll = true;
+    //console.log("sa submitAll json: "+i+": " + JSON.stringify(state.uiSchema[i].editSchema));
+  });
+  return {...state};
+}
+
 function insertField(state, field, before) {
   const insertedState = addField(state, field);
   const order = insertedState.uiSchema["ui:order"];
@@ -176,6 +187,8 @@ export default function form(state = INITIAL_STATE, action) {
     return insertField(clone(state), action.field, action.before);
   case FIELD_SWAP:
     return swapFields(clone(state), action.source, action.target);
+  case FORM_SUBMITALL:
+    return submitAll(clone(state));
   case FORM_RESET:
     return INITIAL_STATE;
   case FORM_UPDATE_TITLE:

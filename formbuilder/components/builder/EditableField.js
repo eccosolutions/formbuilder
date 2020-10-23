@@ -150,6 +150,11 @@ function DraggableFieldContainer(props) {
   );
 }
 
+// ISOLATED COMPONENT
+// called by react-jsonschema-form to draw a field
+// so the props are for the specific field
+// and we can't pass props in, apart from the schema/uiSchema
+
 export default class EditableField extends Component {
   constructor(props) {
     super(props);
@@ -157,19 +162,37 @@ export default class EditableField extends Component {
       schema: props.schema,
       uiSchema: props.uiSchema
     };
+    //console.log("sa init: "+ props.uiSchema.editSchema.submitAll);
   }
 
   componentWillReceiveProps(nextProps) {
+    const schemaUiNew = nextProps.uiSchema;
+    //console.log("receive props json IN: " + JSON.stringify(schemaUiNew.editSchema));
+
     this.setState({
+      edit: !schemaUiNew.editSchema.submitAll,
       schema: nextProps.schema,
-      uiSchema: nextProps.uiSchema
+      uiSchema: schemaUiNew
     });
+    //console.log("receive props json OUT: " + JSON.stringify(schemaUiNew.editSchema));
+  }
+
+  editMode(state) {
+    const schemaUiNew = this.state.uiSchema;
+    if (state) {
+      delete schemaUiNew.editSchema.submitAll;
+    }
+    this.setState({edit: state, uiSchema: schemaUiNew});
+    //console.log("edit mode: " + state);
+  }
+
+  componentDidUpdate(prevProps) {
   }
 
   handleEdit(event) {
     event.preventDefault();
     if (shouldHandleDoubleClick(event.target)) {
-      this.setState({edit: true});
+      this.editMode(true);
     }
   }
 
@@ -178,13 +201,15 @@ export default class EditableField extends Component {
     // SWITCH_FIELD action.
     const updated = pickKeys(this.props.schema, formData, ["type"]);
     const schema = {...this.props.schema, ...updated};
-    this.setState({edit: false, schema});
+    this.setState({schema});
+    this.editMode(false);
     this.props.updateField(
       this.props.name, schema, formData.required, formData.title);
   }
 
   handleUpdateUi(uiSchema) {
-    this.setState({edit: false, uiSchema});
+    this.setState({uiSchema});
+    this.editMode(false);
     this.props.updateFieldUi(
         this.props.name, uiSchema, this.props.name);
   }
@@ -198,7 +223,7 @@ export default class EditableField extends Component {
 
   handleCancel(event) {
     event.preventDefault();
-    this.setState({edit: false});
+    this.editMode(false);
   }
 
   handleDrop(data) {

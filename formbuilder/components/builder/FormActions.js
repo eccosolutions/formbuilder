@@ -23,6 +23,7 @@ export default function FormActions(props) {
           <i className="glyphicon glyphicon-plus" />
           Add a field
         </FieldListDropdown>
+        <Button bsStyle="info" className={"pull-right"} onClick={() => props.submitAll()}>Submit All</Button>
       </ButtonToolbar>
       <ButtonGroup className="pull-right">
         <Button onClick={() => confirm("This action will reset all unsaved changes, Are you sure?") && props.resetForm()}>
