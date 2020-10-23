@@ -99,7 +99,7 @@ class FieldPropertiesEditor extends Component {
                     className="edit-in-place"
                     classEditing="edit-in-place-active"
                     propName="md"
-                    value={this.state.editedUiSchema.md}
+                    value={this.state.editedUiSchema.md || ""}
                     change={(v) => this.setState({editedUiSchema: v})}
                 />
                 <Button bsStyle="info" className={"pull-right"} onClick={() => onUpdateUi(uiSchemaUpdated)}>Submit</Button>
