@@ -9,13 +9,18 @@ import {
   FIELD_INSERT,
   FIELD_SWAP,
   FORM_SUBMITALL,
+  FORM_IMPORT_DIALOG,
+  FORM_IMPORT_TEXT,
+  FORM_IMPORT,
   FORM_RESET,
   FORM_UPDATE_TITLE,
   FORM_UPDATE_DESCRIPTION,
 } from "../actions/fieldlist";
 
 import {SCHEMA_RETRIEVAL_DONE} from "../actions/server";
+import {fromFormDefinition} from "../components/builder/JsonView";
 
+// initial state of form
 const INITIAL_STATE = {
   error: null,
   schema: {
@@ -29,7 +34,10 @@ const INITIAL_STATE = {
     submitAll: false
   },
   formData: {},
+  // global counter
   currentIndex: 0,
+  importFormDialog: false,
+  importFormText: ""
 };
 
 function slugify(string) {
@@ -185,6 +193,21 @@ function setSchema(state, data) {
   return {...state, error: null};
 }
 
+function importDialog(state) {
+  return {...state, importFormDialog: !state.importFormDialog};
+}
+
+function importText(state, text) {
+  return {...state, importFormText: text};
+}
+
+function importForm(state) {
+  const schema = fromFormDefinition(state.importFormText);
+  const stateWithoutImport = {...state, importFormText: "", importFormDialog: false};
+  return setSchema(stateWithoutImport, schema);
+}
+
+// state here is a subset, state.form - see FormContainer.js
 export default function form(state = INITIAL_STATE, action) {
   switch(action.type) {
   case FIELD_ADD:
@@ -204,6 +227,12 @@ export default function form(state = INITIAL_STATE, action) {
     return swapFields(clone(state), action.source, action.target);
   case FORM_SUBMITALL:
     return submitAll(clone(state));
+  case FORM_IMPORT_DIALOG:
+    return importDialog(state);
+  case FORM_IMPORT_TEXT:
+    return importText(clone(state), action.text);
+  case FORM_IMPORT:
+    return importForm(clone(state));
   case FORM_RESET:
     return INITIAL_STATE;
   case FORM_UPDATE_TITLE:

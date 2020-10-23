@@ -6,6 +6,8 @@ export const FIELD_UI_UPDATE = "FIELD_UI_UPDATE";
 export const FIELD_INSERT = "FIELD_INSERT";
 export const FIELD_SWAP = "FIELD_SWAP";
 export const FORM_SUBMITALL = "FORM_SUBMITALL";
+export const FORM_IMPORT_DIALOG = "FORM_IMPORT_DIALOG";
+export const FORM_IMPORT_TEXT = "FORM_IMPORT_TEXT";
 export const FORM_IMPORT = "FORM_IMPORT";
 export const FORM_RESET = "FORM_RESET";
 export const FORM_UPDATE_TITLE = "FORM_UPDATE_TITLE";
@@ -58,4 +60,16 @@ export function resetForm(callback) {
 
 export function submitAll() {
   return {type: FORM_SUBMITALL};
+}
+
+export function importFormDialogFn() {
+  return {type: FORM_IMPORT_DIALOG};
+}
+
+export function importFormTextFn(text) {
+  return {type: FORM_IMPORT_TEXT, text};
+}
+
+export function importFormFn() {
+  return {type: FORM_IMPORT};
 }

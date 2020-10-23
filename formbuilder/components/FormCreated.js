@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ClipboardButton from "react-clipboard.js";
 import {getFormID, getFormURL, getFormEditURL, getAdminURL} from "../utils";
 import URLDisplay from "./URLDisplay";
-import JSONView, {formDefinition} from "./builder/JsonView";
+import JSONView, {toFormDefinition} from "./builder/JsonView";
 
 export default class FormCreated extends Component {
   constructor(props) {
@@ -50,7 +50,7 @@ export default class FormCreated extends Component {
             <li>
               <ClipboardButton
                   className="btn btn-link"
-                  data-clipboard-text={formDefinition(adminURL, this.props.schema, this.props.uiSchema)}
+                  data-clipboard-text={toFormDefinition(adminURL, this.props.schema, this.props.uiSchema)}
                   onSuccess={this.onClipboardCopiedJson.bind(this)}>
                 <i className="glyphicon glyphicon-copy" /> <a>{this.state.copiedJson ? "Copied!" : "Copy to clipboard"}</a>
               </ClipboardButton>

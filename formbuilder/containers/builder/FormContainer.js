@@ -10,6 +10,7 @@ import TitleField from "../../components/builder/TitleField";
 import DescriptionField from "../../components/builder/DescriptionField";
 
 // HANDLE THE react-json-schema
+// this is the state that is passed to form.js
 
 function mapStateToProps(state) {
   return {

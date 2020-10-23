@@ -1,12 +1,17 @@
 import React from "react";
 
-export function formDefinition(adminUrl, schema, uiSchema) {
+export function toFormDefinition(adminUrl, schema, uiSchema) {
   const wrapperPrefix = "{\"meta\": {\"label\": \"json-schema-form-layout\", \"version\": \"1\", " +
       "\"formbuilder\": \""+ adminUrl + "\"}, \"schema\": {";
   const schemaFmt = JSON.stringify(schema, null, 2);
   const uiSchemaFmt = JSON.stringify(uiSchema, null, 2);
   const wrapperPostfix = "}}";
   return wrapperPrefix + "\"schema\": " + schemaFmt + ", \"uiSchema\": " + uiSchemaFmt + wrapperPostfix;
+}
+
+export function fromFormDefinition(formDefinition) {
+  const fd = JSON.parse(formDefinition);
+  return fd.schema;
 }
 
 export default function JSONView(props) {
@@ -17,7 +22,7 @@ export default function JSONView(props) {
           readOnly=""
           rows="20"
           style={{fontFamily: "monospace"}}
-          value={formDefinition(props.adminUrl, props.schema, props.uiSchema)}
+          value={toFormDefinition(props.adminUrl, props.schema, props.uiSchema)}
           onChange={() => {}} />
       </div>
   );
