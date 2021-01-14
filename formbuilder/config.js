@@ -20,7 +20,7 @@ export default {
           type: "object",
           properties: {
             title: {type: "string", title: "Title"},
-            description: {type: "string", title: "Paragraph"}
+            description: {type: "string", title: "Short note"}
           }
         }
       },
@@ -58,7 +58,7 @@ export default {
           type: "object",
           properties: {
             title: {type: "string", title: "Label"},
-            description: {type: "string", title: "Example value"},
+            description: {type: "string", title: "Short text description"},
             required: {type: "boolean"},
           }
         },
@@ -81,7 +81,7 @@ export default {
           type: "object",
           properties: {
             title: {type: "string", title: "Label"},
-            description: {type: "string", title: "Example value"},
+            description: {type: "string", title: "Long text description"},
             required: {type: "boolean"},
           }
         },
