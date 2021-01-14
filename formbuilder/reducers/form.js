@@ -49,6 +49,14 @@ function addField(state, field) {
   state.currentIndex += 1;
   const name = `Question ${state.currentIndex}`;
   const _slug = slugify(name);
+
+  const existingSlugs = Object.keys(state.schema.properties);
+  if (existingSlugs.indexOf(_slug) !== -1) {
+    // Field name already exists, we can't update state
+    const error = `Duplicate field name "${_slug}", operation aborted.`;
+    return {...state, error};
+  }
+
   state.schema.properties[_slug] = {...field.jsonSchema, title: name};
   state.uiSchema[_slug] = field.uiSchema;
   state.uiSchema["ui:order"] = (state.uiSchema["ui:order"] || []).concat(_slug);
