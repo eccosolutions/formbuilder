@@ -24,6 +24,20 @@ function pickKeys(source, target, excludedKeys) {
   return result;
 }
 
+function filterKeyValue(source, target, excludeKey, excludeValue) {
+  const result = {};
+
+  let isExcluded;
+  for (let key in source) {
+    isExcluded = excludeKey.indexOf(key) !== -1 && source[key] === excludeValue;
+    if (isExcluded) {
+      continue;
+    }
+    result[key] = target[key];
+  }
+  return result;
+}
+
 function shouldHandleDoubleClick(node) {
   // disable doubleclick on number input, so people can use inc/dec arrows
   if (node.tagName === "INPUT" &&
@@ -207,7 +221,9 @@ export default class EditableField extends Component {
       this.props.name, schema, formData.required, formData.title);
   }
 
-  handleUpdateUi(uiSchema) {
+  handleUpdateUi(uiSchemaNew) {
+    const updated = filterKeyValue(this.props.uiSchema, uiSchemaNew, "ui:widget", "alt-date");
+    const uiSchema = {...this.props.uiSchema, ...updated};
     this.setState({uiSchema});
     this.editMode(false);
     this.props.updateFieldUi(
