@@ -2,17 +2,22 @@ import React, { Component } from "react";
 import ClipboardButton from "react-clipboard.js";
 import {getFormID, getFormURL, getFormEditURL, getAdminURL} from "../utils";
 import URLDisplay from "./URLDisplay";
+import JSONView, {formDefinition} from "./builder/JsonView";
 
 export default class FormCreated extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      copied: false
+      copiedLink: false,
+      copiedJson: false
     };
   }
 
-  onClipboardCopied() {
-    this.setState({copied: true});
+  onClipboardCopiedLink() {
+    this.setState({copiedLink: true});
+  }
+  onClipboardCopiedJson() {
+    this.setState({copiedJson: true});
   }
 
   render() {
@@ -23,43 +28,36 @@ export default class FormCreated extends Component {
     const userformEditURL = getFormEditURL(adminToken);
     const adminURL = getAdminURL(adminToken);
 
-    const twitterText = `I've just created a form, it is at ${userformURL}!`;
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${twitterText}`;
-
-    const emailSubject = `Hey, I just created a new form`;
-    const emailBody = `Hi folks,
-
-I just created a new form and it's available at:
-
-    ${userformURL}
-
-Please, take some time to fill it,
-`;
-
-    const emailUrl = `mailto:?subject=${emailSubject}&body=${encodeURIComponent(emailBody)}`;
     return (
       <form>
-        <h3>Neat, your form is now ready!</h3>
+        <h3>Form definition</h3>
         <div className="form-group">
           <ul className="list-inline">
-            <li><button className="btn btn-link"><i className="glyphicon glyphicon-send" />
-              <a href={emailUrl}> Send by email</a></button>
-            </li>
-            <li><button className="btn btn-link"><i className="glyphicon glyphicon-cloud" />
-              <a href={twitterUrl}> Tweet it</a></button>
-            </li>
             <li>
             <ClipboardButton
               className="btn btn-link"
               data-clipboard-text={userformURL}
-              onSuccess={this.onClipboardCopied.bind(this)}>
-              <i className="glyphicon glyphicon-copy" /> <a>{this.state.copied ? "Copied!" : "Copy to clipboard"}</a>
+              onSuccess={this.onClipboardCopiedLink.bind(this)}>
+              <i className="glyphicon glyphicon-copy" /> <a>{this.state.copiedLink ? "Copied!" : "Copy to clipboard"}</a>
             </ClipboardButton>
             </li>
           </ul>
-          <URLDisplay url={userformURL} />
+          {/* DATA ENTRY <URLDisplay url={userformURL} />*/}
+          {/* DATA COLLECTION <URLDisplay url={adminURL} type="admin" />*/}
           <URLDisplay url={userformEditURL} />
-          <URLDisplay url={adminURL} type="admin" />
+          <br/><br/>
+          <ul className="list-inline">
+            <li>
+              <ClipboardButton
+                  className="btn btn-link"
+                  data-clipboard-text={formDefinition(adminURL, this.props.schema, this.props.uiSchema)}
+                  onSuccess={this.onClipboardCopiedJson.bind(this)}>
+                <i className="glyphicon glyphicon-copy" /> <a>{this.state.copiedJson ? "Copied!" : "Copy to clipboard"}</a>
+              </ClipboardButton>
+            </li>
+          </ul>
+
+          <JSONView adminUrl={adminURL} schema={this.props.schema} uiSchema={this.props.uiSchema}/>
         </div>
       </form>
     );

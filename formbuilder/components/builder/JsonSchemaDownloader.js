@@ -15,7 +15,7 @@ export default function JsonSchemaDownloader(props) {
       </a>
       <a className="list-group-item" download={filename} href={uiSchemaFileContent}>
           <i className="glyphicon glyphicon-download" />&nbsp;
-      Download JSON ui
+          Download JSON ui
       </a>
     </div>
   );
