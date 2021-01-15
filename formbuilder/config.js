@@ -214,7 +214,6 @@ export default {
         title: "Edit me",
       },
       uiSchema: {
-        "ui:widget": "alt-date",
         editSchema: {
           type: "object",
           properties: {
