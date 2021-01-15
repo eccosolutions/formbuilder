@@ -17,6 +17,7 @@ export default {
       },
       uiSchema: {
         editSchema: {
+          id: "nonInputText",
           type: "object",
           properties: {
             title: {type: "string", title: "Title"},
@@ -38,6 +39,7 @@ export default {
         "ui:field": "markdownBlock",
         md: "MARK DOWN TEXT",
         editSchema: {
+          id: "nonInputMarkdown",
           editor: "markdown"
         }
       },
@@ -55,6 +57,7 @@ export default {
       },
       uiSchema: {
         editSchema: {
+          id: "text",
           type: "object",
           properties: {
             title: {type: "string", title: "Label"},
@@ -78,6 +81,7 @@ export default {
       uiSchema: {
         "ui:widget": "textarea",
         editSchema: {
+          id: "multilinetext",
           type: "object",
           properties: {
             title: {type: "string", title: "Label"},
@@ -99,6 +103,7 @@ export default {
       },
       uiSchema: {
         editSchema: {
+          id: "checkbox",
           type: "object",
           properties: {
             title: {type: "string", title: "Label"},
@@ -124,6 +129,7 @@ export default {
       uiSchema: {
         "ui:widget": "checkboxes",
         editSchema: {
+          id: "multiple-checkbox",
           type: "object",
           properties: {
             title: {type: "string", title: "Label"},
@@ -159,6 +165,7 @@ export default {
       uiSchema: {
         "ui:widget": "radio",
         editSchema: {
+          id: "radiobuttonlist",
           type: "object",
           properties: {
             title: {type: "string", title: "Label"},
@@ -188,6 +195,7 @@ export default {
       uiSchema: {
         "ui:widget": "select",
         editSchema: {
+          id: "select",
           type: "object",
           properties: {
             title: {type: "string", title: "Label"},
@@ -215,6 +223,7 @@ export default {
       },
       uiSchema: {
         editSchema: {
+          id: "date",
           type: "object",
           properties: {
             title: {type: "string", title: "Label"},
