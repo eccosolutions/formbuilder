@@ -18,7 +18,6 @@ import {
 } from "../actions/fieldlist";
 
 import {SCHEMA_RETRIEVAL_DONE} from "../actions/server";
-import {fromFormDefinition} from "../components/builder/JsonView";
 
 // initial state of form
 const INITIAL_STATE = {
@@ -39,6 +38,45 @@ const INITIAL_STATE = {
   importFormDialog: false,
   importFormText: ""
 };
+
+/**
+ * Our own 'form definition' schema wraps the formbuilder schema.
+ * This method exports our form definition.
+ */
+export function toFormDefinition(adminUrl, schemaIn, uiSchemaIn) {
+  const schema = cleanFormBuilder(schemaIn, uiSchemaIn);
+  const schemaFmt = JSON.stringify(schema, null, 2);
+  return `{"meta": {"label": "json-schema-form-layout", "version": "1", "formbuilder": "${adminUrl}"}, "schema": ${schemaFmt}}`;
+}
+
+/**
+ * Our own 'form definition' schema wraps the formbuilder schema.
+ * This method imports our form definition.
+ */
+export function fromFormDefinition(formDefinition) {
+  const fd = JSON.parse(formDefinition);
+  return cleanFormBuilder(fd.schema.schema, fd.schema.uiSchema);
+}
+
+/**
+ * Clean the formbuilder schema.
+ * This is good when we've exported dodgy fields in the past.
+ * Dodgy data is due to us passing data needed to render the fields through the form definition data itself (specifically uiSchema)
+ * which is because we pass the fields to the react-json-schema itself to render so have little access outside this data.
+ * The export however includes this dodgy data - which can then change the functionality of the fields, for instance 'submitAll'
+ * can already be set to true but the default is false (EditField.js), so clicking 'submit all' doesn't change anything.
+ * NB We can use this 'clean' therefore to stripp out the incoming ui fields for any newer definitions of the ui data
+ * - being careful to retain the 'md' markdown.
+ */
+export function cleanFormBuilder(schema, uiSchema) {
+  delete uiSchema.submitAll;
+  const existing = Object.keys(schema.properties);
+  existing.forEach(i => {
+    delete uiSchema[i].editSchema.submitAll;
+    //console.log("sa submitAll json: "+i+": " + JSON.stringify(formDefinition.schema.uiSchema[i].editSchema));
+  });
+  return {schema: schema, uiSchema: uiSchema};
+}
 
 function slugify(string) {
   return S(string).slugify().replace("-", "_").s;
@@ -240,7 +278,7 @@ export default function form(state = INITIAL_STATE, action) {
   case FORM_UPDATE_DESCRIPTION:
     return updateFormDescription(clone(state), action.description);
   case SCHEMA_RETRIEVAL_DONE:
-    return setSchema(clone(state), action.data);
+    return setSchema(clone(state), cleanFormBuilder(action.data));
   default:
     return state;
   }

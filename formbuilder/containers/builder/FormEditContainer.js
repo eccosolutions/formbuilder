@@ -10,9 +10,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return {
-    //submitAll: true
-  };
+  return {};
 }
 
 export default connect(

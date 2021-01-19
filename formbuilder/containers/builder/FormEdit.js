@@ -8,17 +8,9 @@ export default class FormEdit extends Component {
     // If the schema is empty, then load the schema into the state
     if (!this.state) {
       const formId = getFormID(this.props.params.adminId);
+      // callback after SCHEMA_RETRIEVAL_DONE is dispatched in server.js
       const callback = (data) => {
         document.title = data.schema.title;
-        /*
-        // TODO - update an existing form by stripping out the incoming ui fields for the newer definitions
-             (retaining the 'md' markdown only)
-        // see publishForm for what gets saved
-        this.setState({
-          schema: data.schema,
-          uiSchema: data.uiSchema
-        });
-        */
       };
       this.props.loadSchema(formId, callback, this.props.params.adminId);
     }
